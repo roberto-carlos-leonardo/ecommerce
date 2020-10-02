@@ -12,6 +12,52 @@ class User extends Model {
 	const SESSION = "user";
 	const SECRET = "HcodePhp7_Secret";
 
+	public static function getFromSession(){
+
+		$user = new User();
+
+		if (isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]["iduser"] > 0 ) {
+
+			$user->setData($data);
+
+		}
+		
+		return $user;
+
+	}
+
+	public static function checkLogin($inadmin = true) {
+
+		if (
+			!isset($_SESSION[User::SESSION])  // seexistir a sessão
+			||
+			!$_SESSION[User::SESSION] // se não for vazia
+			||
+			!(int)$_SESSION[User::SESSION]["iduser"] > 0 // se for administrador
+
+		) {
+
+			return false;
+
+		} else {
+
+			if ($inadmin === true && (bool)$_SESSION[User::SESSION]["inadmin"] === true){
+
+				return true;
+
+			} else if ($inadmin === false){
+
+				return false;
+
+			} else {
+
+				return false;
+
+			}
+		}
+
+	}
+
 	public static function login($login, $password){
 
 		$sql = new Sql();
@@ -50,17 +96,7 @@ class User extends Model {
 
 	public static function verifyLogin($inadmin = true) {
 
-		if (
-
-			!isset($_SESSION[User::SESSION])  // seexistir a sessão
-			||
-			!$_SESSION[User::SESSION] // se não for vazia
-			||
-			!(int)$_SESSION[User::SESSION]["iduser"] > 0 // se for administrador
-			||
-			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin // se for administrador
-
-		) {
+		if ( User::checkLogin($inadmin)){
 
 			header("Location: /admin/login");
 			exit;
