@@ -48,8 +48,6 @@ $app->get('/admin/logout', function() {
 
 });
 
-
-
 $app->get('/admin/forgot', function() {
     
 	$page = new PageAdmin([
