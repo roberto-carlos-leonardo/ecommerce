@@ -30,13 +30,12 @@ $app->get('/admin/products', function() {
 		array_push($pages, [
 			"href"=>"/admin/products?".http_build_query([
 				"page"=>$x + 1,
+				"search"=>$search
 			]),
 			"text"=>$x + 1
 		]);
 
 	}
-
-	$products = Product::listAll();
 
 	$page = new PageAdmin();
 
